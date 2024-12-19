@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../components/Login.vue'
 import RegisterView from '../components/Register.vue'
-import Home from '../components/Home.vue'
 import Cart from '../components/Cart.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import { useUserStore } from '../stores/user'
+import Success from '@/components/Success.vue'
+import Cancel from '@/components/Cancel.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,30 @@ const router = createRouter({
       path: '/cart',
       name: 'cart',
       component: Cart,
+    },
+    {
+      path: '/success',
+      name: 'success',
+      component: () => Success,
+      beforeEnter: (to, from, next) => {
+        if (!to.query.session_id) {
+          next('/');
+        } else {
+          next();
+        }
+      },
+    },
+    {
+      path: '/cancel',
+      name: 'cancel',
+      component: () => Cancel,
+      beforeEnter: (to, from, next) => {
+        if (!to.query.session_id) {
+          next('/');
+        } else {
+          next();
+        }
+      },
     },
   ],
 })

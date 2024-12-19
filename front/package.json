@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@vue-stripe/vue-stripe": "^4.5.0",
     "axios": "^1.7.9",
     "pinia": "^2.3.0",
     "pinia-plugin-persistedstate": "^4.2.0",

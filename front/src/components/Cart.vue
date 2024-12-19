@@ -1,8 +1,8 @@
 <template>
     <div class="max-w-7xl mx-auto p-6">
-        <h3 class="text-2xl font-bold text-gray-900 mb-6">Cart</h3>
+        <h3 class="text-2xl font-bold text-customWhite mb-6">Cart</h3>
 
-        <div v-if="cartProducts.length === 0" class="text-gray-500">
+        <div v-if="cartProducts.length === 0" class="text-customWhite">
             Your cart is empty.
         </div>
 
@@ -38,6 +38,10 @@
             <h4 class="text-xl font-bold text-gray-900">
                 Total: ${{ totalPrice.toFixed(2) }}
             </h4>
+            <button class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                @click="checkout">
+                Checkout
+            </button>
         </div>
     </div>
 </template>
@@ -45,6 +49,8 @@
 <script setup>
 import { computed } from 'vue';
 import { useCartStore } from '@/stores/cart';
+import { loadStripe } from '@stripe/stripe-js';
+import axios from '@/axios';
 
 // Access the Cart Store
 const cartStore = useCartStore();
@@ -57,5 +63,19 @@ const totalPrice = computed(() => cartStore.totalPrice);
 
 const removeFromCart = (productId) => {
     cartStore.removeFromCart(productId);
+};
+
+const checkout = async () => {
+    try {
+        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+        const response = await axios.post('/api/create-checkout-session', {
+            products: cartProducts.value,
+        });
+
+        await stripe.redirectToCheckout({ sessionId: response.data.id });
+    } catch (error) {
+        console.error('Checkout failed:', error);
+    }
 };
 </script>
