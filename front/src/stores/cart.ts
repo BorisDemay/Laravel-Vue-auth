@@ -55,6 +55,10 @@ export const useCartStore = defineStore<'cart', CartState>('cart', {
         totalPrice: (state): number => {
             return state.products.reduce((sum, product) => sum + product.price * product.quantity, 0);
         },
+
+        totalProducts: (state): number => {
+            return state.products.length;
+        }
     },
 
     // Plugin: Persist the cart state in localStorage
