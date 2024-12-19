@@ -2,17 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../components/Login.vue'
 import RegisterView from '../components/Register.vue'
 import Home from '../components/Home.vue'
+import Cart from '../components/Cart.vue'
 import DashboardView from '@/views/DashboardView.vue'
-import { useUserStore } from '../stores/user';
+import { useUserStore } from '../stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home,
-    },
     {
       path: '/login',
       name: 'login',
@@ -24,10 +20,14 @@ const router = createRouter({
       component: RegisterView,
     },
     {
-      path: '/dashboard',
+      path: '/',
       name: 'dashboard',
       component: DashboardView,
-      meta: { requiresAuth: true },
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: Cart,
     },
   ],
 })
