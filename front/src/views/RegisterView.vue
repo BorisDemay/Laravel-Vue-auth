@@ -31,7 +31,6 @@ const register = async () => {
             password_confirmation: passwordConfirmation.value,
         });
         message.value = 'Registration successful!';
-        console.log(response.data);
     } catch (error) {
         const err = error as any;
         console.error('Error:', err.response?.data || err.message);

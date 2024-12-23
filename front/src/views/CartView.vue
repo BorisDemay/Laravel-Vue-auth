@@ -39,7 +39,7 @@
                 Total: ${{ totalPrice.toFixed(2) }}
             </h4>
             <button class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                @click="checkout">
+                @click="proceedToCheckout">
                 Checkout
             </button>
         </div>
@@ -49,33 +49,47 @@
 <script setup>
 import { computed } from 'vue';
 import { useCartStore } from '@/stores/cart';
-import { loadStripe } from '@stripe/stripe-js';
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 import axios from '@/axios';
+import { loadStripe } from '@stripe/stripe-js';
 
-// Access the Cart Store
+const router = useRouter();
 const cartStore = useCartStore();
+const userStore = useUserStore();
 
-// Get the list of products in the cart
 const cartProducts = computed(() => cartStore.products);
-
-// Get the total price of the cart
 const totalPrice = computed(() => cartStore.totalPrice);
 
 const removeFromCart = (productId) => {
     cartStore.removeFromCart(productId);
 };
 
-const checkout = async () => {
-    try {
-        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const proceedToCheckout = async () => {
+    if (userStore.user?.email) {
+        // Logged-in user
+        try {
+            const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-        const response = await axios.post('/api/create-checkout-session', {
-            products: cartProducts.value,
-        });
+            const checkoutItems = cartProducts.value.map((product) => ({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: product.quantity,
+            }));
 
-        await stripe.redirectToCheckout({ sessionId: response.data.id });
-    } catch (error) {
-        console.error('Checkout failed:', error);
+            const response = await axios.post('/api/create-checkout-session', {
+                products: checkoutItems,
+                email: userStore.user.email,
+            });
+
+            await stripe.redirectToCheckout({ sessionId: response.data.id });
+        } catch (error) {
+            console.error('Checkout failed:', error);
+        }
+    } else {
+        // Unauthenticated user
+        router.push({ name: 'checkout' });
     }
 };
 </script>

@@ -40,6 +40,9 @@ const productsCounter = () => {
             {{ productsCounter() }}
           </span>
         </router-link>
+        <router-link v-if="userStore.user" to="/orders" class="text-sm font-medium hover:text-gray-300">
+          Orders
+        </router-link>
         <button v-if="userStore.user" @click="logout"
           class="text-sm font-medium hover:text-gray-300 focus:outline-none">
           Logout

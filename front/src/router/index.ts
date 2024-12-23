@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from '../components/Login.vue'
-import RegisterView from '../components/Register.vue'
-import Cart from '../components/Cart.vue'
+import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import Cart from '@/views/CartView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import { useUserStore } from '../stores/user'
 import Success from '@/components/Success.vue'
 import Cancel from '@/components/Cancel.vue'
+import OrderView from '@/views/OrderView.vue'
+import OrderDetailsView from '@/views/OrderDetailsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +31,21 @@ const router = createRouter({
       path: '/cart',
       name: 'cart',
       component: Cart,
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      component: OrderView,
+    },
+    {
+      path: '/order/:uuid',
+      name: 'order-details',
+      component: OrderDetailsView,
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: () => import('@/components/StripeCheckout.vue'),
     },
     {
       path: '/success',

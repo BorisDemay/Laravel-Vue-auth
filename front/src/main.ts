@@ -6,9 +6,9 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate';
 import axios from './axios';
 
-axios.get('/sanctum/csrf-cookie').then(() => {
-    console.log('CSRF cookie initialized.');
-  });
+// axios.get('/sanctum/csrf-cookie').then(() => {
+//     console.log('CSRF cookie initialized.');
+//   });
 
 const app = createApp(App)
 const pinia = createPinia();

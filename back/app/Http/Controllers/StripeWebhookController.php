@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Checkout;
+use App\Models\Order;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 
@@ -48,7 +49,49 @@ class StripeWebhookController extends Controller
     {
         Log::info('Processing checkout session completed', ['session_id' => $session->id]);
 
-        Checkout::where('session_id', $session->id)->update(['status' => 'success']);
+        // Fetch the checkout record associated with this session
+        $checkout = Checkout::where('session_id', $session->id)->first();
+
+        if (!$checkout) {
+            Log::error('Checkout session not found', ['session_id' => $session->id]);
+            return;
+        }
+
+        // Update checkout status to success
+        $checkout->update(['status' => 'success']);
+
+        // Ensure client_email exists in the Checkout model
+        if (is_null($checkout->client_email)) {
+            Log::error('Client email is null', ['checkout_id' => $checkout->id]);
+            return;
+        }
+
+        // Save the order
+        $order = $checkout->orders()->create([
+            'user_id' => $checkout->user_id,
+            // lost 30 minutes here because i forgot to add 'client_email' in the order model fillable 😐😐😐
+            'client_email' => 'demayboris@gmail.com',
+            'total_price' => $this->calculateTotalPrice($checkout->products),
+            'status' => 'completed',
+        ]);
+
+        // Attach products to the order
+        foreach ($checkout->products as $product) {
+            $order->products()->attach($product['id'], [
+                'quantity' => $product['quantity'],
+                'price' => $product['price'],
+            ]);
+        }
+    }
+
+    /**
+     * Calculate the total price for the order.
+     */
+    protected function calculateTotalPrice($products)
+    {
+        return collect($products)->sum(function ($product) {
+            return $product['price'] * $product['quantity'];
+        });
     }
 
     protected function processPaymentSucceeded($paymentIntent)

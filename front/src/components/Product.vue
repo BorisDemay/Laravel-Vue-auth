@@ -29,7 +29,6 @@ onMounted(async () => {
 const addToCart = (product: Product) => {
     const cartProduct = { ...product, quantity: 1 };
     cartStore.addToCart(cartProduct);
-    console.log('Added to cart:', cartProduct);
 };
 </script>
 
