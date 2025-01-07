@@ -15,6 +15,8 @@ Route::get('/user', function (Request $request) {
 Route::middleware('api')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
     Route::apiResource('products', ProductController::class);
     // you need to connect this route to your Stripe webhook endpoint, check the checkout.session.completed and checkout.session.expired events
@@ -28,7 +30,6 @@ Route::middleware('api')->group(function () {
     });
 
     Route::post('/create-checkout-session-no-email', [StripeController::class, 'createSession']);
-
 
     Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
 });

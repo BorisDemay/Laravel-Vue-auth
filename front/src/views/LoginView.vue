@@ -61,6 +61,12 @@ const togglePasswordVisibility = () => {
                         </button>
                     </div>
                 </div>
+                <!-- forget password button -->
+                <div class="flex justify-end">
+                    <router-link to="/forgot-password" class="text-sm text-customBlack hover:text-gray-700">
+                        Forgot password?
+                    </router-link>
+                </div>
 
                 <!-- Submit Button -->
                 <button :disabled="!email || !password" type="submit"

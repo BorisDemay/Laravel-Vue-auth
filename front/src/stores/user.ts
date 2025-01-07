@@ -60,6 +60,30 @@ export const useUserStore = defineStore('user', {
         router.push('/login');
       }
     },
+
+    // api function : 
+    // public function forgotPassword(Request $request)
+    // {
+    //     $request->validate(['email' => 'required|email']);
+
+    //     $status = Password::sendResetLink(
+    //         $request->only('email')
+    //     );
+
+    //     return $status === Password::RESET_LINK_SENT
+    //         ? response()->json(['message' => 'Reset link sent to your email.', 'status' => true])
+    //         : response()->json(['message' => 'Unable to send reset link', 'status' => false], 500);
+    // }
+    async forgotPassword(email: string) {
+      try {
+          const response = await axios.post('/api/forgot-password', { email });
+          return response.data.message; // Return the API message
+      } catch (error: any) {
+          console.error('Forgot password failed:', error.response?.data || error.message);
+          return error.response?.data?.message || 'An error occurred.';
+      }
+  }
+  
   },
 
   persist: {
