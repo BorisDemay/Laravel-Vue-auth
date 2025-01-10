@@ -1,6 +1,6 @@
 # Laravel / Vue / Tailwind boilerplate
 
-This is a boilerplate project that integrates Laravel, Vue.js, and Tailwind CSS to provide a robust authentication system. This setup aims to streamline the development process by offering a pre-configured environment for building modern web applications.
+This is a boilerplate project that integrates Laravel, Vue.js, and Tailwind CSS to provide a robust authentication system and a cart system. This setup aims to streamline the development process by offering a pre-configured environment for building modern web applications.
 
 ## Features
 
