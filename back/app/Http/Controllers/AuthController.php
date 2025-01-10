@@ -68,6 +68,7 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
+    // if you want to change the response message, you can update the resources/views/vendor/notifications/email.blade.php
     public function forgotPassword(Request $request)
     {
         $request->validate(['email' => 'required|email']);
