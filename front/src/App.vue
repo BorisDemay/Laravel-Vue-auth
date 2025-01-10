@@ -1,89 +1,64 @@
 <script setup lang="ts">
 import { useUserStore } from './stores/user';
+import { useCartStore } from './stores/cart';
+import { computed } from 'vue';
+
 import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
+const cartStore = useCartStore();
+
 const router = useRouter();
 
 const logout = async () => {
   await userStore.logout(router);
 };
+const productsCounter = () => {
+  return cartStore.totalProducts;
+};
+
 </script>
 
 <template>
   <header>
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link v-if="!userStore.user" to="/login">Login</router-link>
-      <router-link v-if="!userStore.user" to="/register">Register</router-link>
-      <button v-if="userStore.user" @click="logout">Logout</button>
-    </nav>
-    <p v-if="userStore.user">Hello, {{ userStore.user.name }}</p>
+    <div class="mx-auto flex items-center justify-between p-4">
+      <div>
+        <router-link to="/" class="text-xl font-bold hover:text-gray-300">Home</router-link>
+      </div>
+      <nav class="flex space-x-4">
+        <router-link v-if="!userStore.user" to="/login" class="text-sm font-medium hover:text-gray-300">
+          Login
+        </router-link>
+        <router-link v-if="!userStore.user" to="/register" class="text-sm font-medium hover:text-gray-300">
+          Register
+        </router-link>
+        <router-link to="/cart" class="relative inline-block text-sm font-medium hover:text-gray-300">
+          <i class="fas fa-cart-shopping text-lg"></i>
+          <!-- Counter -->
+          <span v-if="productsCounter() > 0"
+            class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-xs font-semibold bg-orange-400 text-white rounded-full w-5 h-5 flex items-center justify-center">
+            {{ productsCounter() }}
+          </span>
+        </router-link>
+        <router-link v-if="userStore.user" to="/orders" class="text-sm font-medium hover:text-gray-300">
+          Orders
+        </router-link>
+        <button v-if="userStore.user" @click="logout"
+          class="text-sm font-medium hover:text-gray-300 focus:outline-none">
+          Logout
+        </button>
+      </nav>
+    </div>
+    <div class="p-2 text-center" v-if="userStore.user">
+      <p>Hello, {{ userStore.user.name }}</p>
+    </div>
   </header>
-  <router-view />
+  <main class="p-6">
+    <router-view />
+  </main>
 </template>
 
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
+<style>
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css';
 </style>

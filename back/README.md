@@ -24,7 +24,7 @@ This repository contains the **Laravel backend** for a complete authentication s
 
 -   **Security**:
     -   CSRF protection for API requests.
-    -   Secure password hashing with **bcrypt**.
+    -   Secure password hashing with Laravel's built-in **Hash** facade.
 
 ---
 
