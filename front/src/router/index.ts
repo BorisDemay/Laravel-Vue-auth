@@ -9,6 +9,8 @@ import Cancel from '@/components/Cancel.vue'
 import OrderView from '@/views/OrderView.vue'
 import OrderDetailsView from '@/views/OrderDetailsView.vue'
 import ForgotPassword from '@/views/ForgotPasswordView.vue'
+import ProfileView from '@/views/ProfileView.vue'
+import ResetPasswordView from '@/views/ResetPasswordView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,9 +51,19 @@ const router = createRouter({
       component: () => import('@/components/StripeCheckout.vue'),
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+    },
+    {
       path: '/forgot-password',
       name: 'forgot-password',
       component: ForgotPassword,
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: ResetPasswordView,
     },
     {
       path: '/success',

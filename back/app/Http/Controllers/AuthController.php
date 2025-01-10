@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -86,22 +87,26 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|string|min:8|confirmed',
+            'token' => 'required', // Token from the reset link
+            'email' => 'required|email', // Email associated with the token
+            'password' => 'required|string|min:8|confirmed', // New password and confirmation
         ]);
 
+        // Attempt to reset the password using Laravel's Password broker
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($password), // Update the password
                 ])->save();
             }
         );
 
-        return $status == Password::PASSWORD_RESET
-            ? response()->json(['message' => 'Password reset successfully', 'status' => true])
-            : response()->json(['message' => 'Unable to reset password', 'status' => false], 500);
+        // Check the reset status
+        if ($status == Password::PASSWORD_RESET) {
+            return response()->json(['message' => 'Password reset successfully', 'status' => true], 200);
+        } else {
+            return response()->json(['message' => 'Invalid token or email.', 'status' => false], 400);
+        }
     }
 }

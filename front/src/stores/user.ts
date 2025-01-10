@@ -61,19 +61,6 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    // api function : 
-    // public function forgotPassword(Request $request)
-    // {
-    //     $request->validate(['email' => 'required|email']);
-
-    //     $status = Password::sendResetLink(
-    //         $request->only('email')
-    //     );
-
-    //     return $status === Password::RESET_LINK_SENT
-    //         ? response()->json(['message' => 'Reset link sent to your email.', 'status' => true])
-    //         : response()->json(['message' => 'Unable to send reset link', 'status' => false], 500);
-    // }
     async forgotPassword(email: string) {
       try {
           const response = await axios.post('/api/forgot-password', { email });
@@ -82,8 +69,17 @@ export const useUserStore = defineStore('user', {
           console.error('Forgot password failed:', error.response?.data || error.message);
           return error.response?.data?.message || 'An error occurred.';
       }
-  }
-  
+    },
+
+    async resetPassword(token: string, email : string, password: string, password_confirmation: string) {
+      try {
+          const response = await axios.post('/api/reset-password', { token ,email, password, password_confirmation });
+          return response.data.message;
+      } catch (error: any) {
+          console.error('Reset password failed:', error.response?.data || error.message);
+          return error.response?.data?.message || 'An error occurred.';
+      }
+    },
   },
 
   persist: {
