@@ -29,6 +29,8 @@ Route::middleware('api')->group(function () {
         Route::get('/orders/{uuid}', [OrderController::class, 'show']);
     });
 
+    Route::get('/product/{id}', [ProductController::class, 'show']);
+
     Route::post('/create-checkout-session-no-email', [StripeController::class, 'createSession']);
 
     Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);

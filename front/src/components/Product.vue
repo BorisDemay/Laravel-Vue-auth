@@ -38,23 +38,25 @@ const addToCart = (product: Product) => {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-white shadow-md rounded-lg p-6 flex flex-col justify-between" v-for="product in products"
                 :key="product.id">
-                <div class="mb-4">
-                    <h4 class="text-lg font-semibold text-gray-900">{{ product.name }}</h4>
-                </div>
-                <div class="flex-1">
-                    <p class="text-gray-700 text-sm mb-4">
-                        {{ product.description || 'No description available.' }}
-                    </p>
-                </div>
-                <div>
-                    <p class="text-gray-900 font-medium">
-                        <strong>Price:</strong> ${{ product.price.toFixed(2) }}
-                    </p>
-                </div>
-                <button class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    @click="addToCart(product)">
-                    Add to Cart
-                </button>
+                <router-link :to="{ name: 'product-details', params: { id: product.id } }">
+                    <div class="mb-4">
+                        <h4 class="text-lg font-semibold text-gray-900">{{ product.name }}</h4>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-gray-700 text-sm mb-4">
+                            {{ product.description || 'No description available.' }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-gray-900 font-medium">
+                            <strong>Price:</strong> ${{ product.price.toFixed(2) }}
+                        </p>
+                    </div>
+                    <button class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        @click="addToCart(product)">
+                        Add to Cart
+                    </button>
+                </router-link>
             </div>
         </div>
     </div>
