@@ -14,23 +14,27 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        $user = $request->user();
+        $orders = Order::with(['products'])
+            ->latest()
+            ->paginate(10);
 
-        if (!$user) {
-            return response()->json(['error' => 'User not authenticated'], 401);
+        if ($request->expectsJson()) {
+            return response()->json(['orders' => $orders]);
         }
 
-        $orders = $user->orders()->with('products')->get();
-
-        return response()->json(['orders' => $orders]);
+        return view('admin.orders.index', compact('orders'));
     }
 
-    public function show($uuid)
+    public function show(Request $request, $uuid)
     {
-        $order = Order::where('uuid', $uuid)->with('products')->firstOrFail();
+        $order = Order::where('uuid', $uuid)
+            ->with('products')
+            ->firstOrFail();
 
-        $this->authorize('view', $order);
+        if ($request->expectsJson()) {
+            return response()->json($order);
+        }
 
-        return response()->json($order);
+        return view('admin.orders.show', compact('order'));
     }
 }

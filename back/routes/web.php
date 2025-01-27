@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('products', ProductController::class);
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{uuid}', [OrderController::class, 'show'])->name('orders.show');
 });
 
 require __DIR__.'/auth.php';
