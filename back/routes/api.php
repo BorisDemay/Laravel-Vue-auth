@@ -27,6 +27,7 @@ Route::middleware('api')->group(function () {
         Route::get('/user', [AuthController::class, 'user']);
         Route::get('/orders', [OrderController::class, 'index']);
         Route::get('/orders/{uuid}', [OrderController::class, 'show']);
+        Route::get('/products', [ProductController::class, 'index']);
     });
 
     Route::get('/product/{id}', [ProductController::class, 'show']);
@@ -34,4 +35,10 @@ Route::middleware('api')->group(function () {
     Route::post('/create-checkout-session-no-email', [StripeController::class, 'createSession']);
 
     Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
+});
+
+Route::prefix('api')->middleware('auth:sanctum')->group(function () {
+    // Orders routes
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders/{uuid}', [OrderController::class, 'show']);
 });

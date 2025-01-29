@@ -19,26 +19,32 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($orders as $order)
-                <tr>
-                    <td class="px-6 py-4">{{ $order->uuid }}</td>
-                    <td class="px-6 py-4">{{ $order->client_email }}</td>
-                    <td class="px-6 py-4">{{ number_format($order->total_price, 2, ',', ' ') }} €</td>
-                    <td class="px-6 py-4">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            {{ $order->status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                            {{ $order->status === 'completed' ? 'Complétée' : 'En attente' }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4">{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                    <td class="px-6 py-4">
-                        <a href="{{ route('orders.show', $order->uuid) }}" 
-                           class="text-blue-600 hover:text-blue-900">
-                            Détails
-                        </a>
-                    </td>
-                </tr>
-                @endforeach
+                @forelse($orders as $order)
+                    <tr>
+                        <td class="px-6 py-4">{{ $order->uuid }}</td>
+                        <td class="px-6 py-4">{{ $order->client_email }}</td>
+                        <td class="px-6 py-4">{{ number_format($order->total_price, 2, ',', ' ') }} €</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {{ $order->status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                {{ $order->status === 'completed' ? 'Complétée' : 'En attente' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="px-6 py-4">
+                            <a href="{{ route('orders.show', $order->uuid) }}" 
+                               class="text-blue-600 hover:text-blue-900">
+                                Détails
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            Aucune commande trouvée
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
 

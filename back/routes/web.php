@@ -13,7 +13,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{uuid}', [OrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{uuid}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::post('/orders/{uuid}/send-email', [OrderController::class, 'sendEmail'])->name('orders.send-email');
 });
 
 require __DIR__.'/auth.php';
