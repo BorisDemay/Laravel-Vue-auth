@@ -36,9 +36,3 @@ Route::middleware('api')->group(function () {
 
     Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
 });
-
-Route::prefix('api')->middleware('auth:sanctum')->group(function () {
-    // Orders routes
-    Route::get('/orders', [OrderController::class, 'index']);
-    Route::get('/orders/{uuid}', [OrderController::class, 'show']);
-});
