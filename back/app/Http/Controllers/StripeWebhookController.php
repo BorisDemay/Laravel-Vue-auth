@@ -72,7 +72,7 @@ class StripeWebhookController extends Controller
             // lost 30 minutes here because i forgot to add 'client_email' in the order model fillable 😐😐😐
             'client_email' => 'demayboris@gmail.com',
             'total_price' => $this->calculateTotalPrice($checkout->products),
-            'status' => 'completed',
+            // 'status' => 'completed',
         ]);
 
         // Attach products to the order
