@@ -8,16 +8,11 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\OrderController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware('api')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-    Route::get('/products', [ProductController::class, 'index']);
 
     Route::apiResource('products', ProductController::class);
     // you need to connect this route to your Stripe webhook endpoint, check the checkout.session.completed and checkout.session.expired events
